@@ -27,5 +27,7 @@ jobs:
     steps:
       - name: Deploy to ECS
         run: |
-          aws ecs update-service --cluster spring --service springservice --task-definition springtaskdefinition
-
+          aws ecs update-service --cluster spring --service springservice --task-definition springtaskdefinition:1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
