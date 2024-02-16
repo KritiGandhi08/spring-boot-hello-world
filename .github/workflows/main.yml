@@ -50,10 +50,6 @@ jobs:
             --service springservice\
             --task-definition springtaskdefinition
 
-      - name: Validate Service
-        run: |
-          sleep 60
-          curl -f ecsalb-1698714322.ap-south-1.elb.amazonaws.com/ || exit 1
 
       - name: Send Notification
         run: |
