@@ -23,7 +23,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-hello-world:${{ github.sha }} .
-          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-boot-hello-world:${{ github.sha }}
 
   deploy:
@@ -41,18 +41,26 @@ jobs:
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set default.region ap-south-1
+          aws configure set default.region your-aws-region  # Replace with your AWS region
+
+      - name: Update ECS Task Definition
+        run: |
+          aws ecs register-task-definition \
+            --family spring-boot-hello-world \
+            --container-definitions "$(cat ecs-container-definitions.json)"
 
       - name: Update ECS Service
         run: |
           aws ecs update-service \
-            --cluster spring\
-            --service springservice\
-            --task-definition springtaskdefinition
+            --cluster your-ecs-cluster-name \
+            --service your-ecs-service-name \
+            --task-definition spring-boot-hello-world
 
+      - name: Validate Service
+        run: |
+          sleep 60
+          curl -f http://your-load-balancer-url/ || exit 1
 
       - name: Send Notification
         run: |
           echo "Deployment successful!"
-
-
