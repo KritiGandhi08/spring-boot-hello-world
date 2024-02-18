@@ -47,7 +47,7 @@ jobs:
         run: |
           aws ecs register-task-definition \
             --family spring-boot-task \
-            --container-definitions "$(cat ecs-container-definitions.json)"
+            --container-definitions "$(cat spring-boot-hello-world/.github/workflows/ecs-container-definitions.json)"
 
       - name: Update ECS Service
         run: |
