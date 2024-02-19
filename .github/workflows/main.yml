@@ -43,7 +43,13 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set default.region ap-south-1
-      
+          
+      - name: Update ECS Task Definition
+        run: |
+          aws ecs register-task-definition \
+          --family spring-boot-task \
+          --container-definitions ecs-container-definitions.json
+
 
       - name: Update ECS Service
         run: |
