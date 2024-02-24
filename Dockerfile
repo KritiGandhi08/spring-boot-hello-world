@@ -1,17 +1,15 @@
-# Use an official OpenJDK runtime as a parent image
+
+# Use the official OpenJDK base image
 FROM openjdk:11-jre-slim
 
-# Set the working directory to /app
+# Set the working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Copy the JAR file into the container
+COPY target/spring-boot-2-hello-world-1.0.2-SNAPSHOT.jar app.jar
 
-# Make port 8080 available to the world outside this container
+# Expose the port the app runs on
 EXPOSE 8080
 
-# Define environment variable
-ENV NAME World
-
-# Run spring-boot-hello-world.jar when the container launches
-CMD ["java", "-jar", "spring-boot-hello-world.jar"]
+# Define the command to run the application
+CMD ["java", "-jar", "app.jar"]
